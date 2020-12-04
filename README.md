@@ -6,79 +6,42 @@
 
 The financial departments of large companies often deal with foreign currency transactions while doing international business. As a result, they are always looking for anything that can help them better understand the future direction and risk of various currencies. Hedge funds, too, are keenly interested in anything that will give them a consistent edge in predicting currency movements.
 
-In this assignment, you will test the many time-series tools that you have learned in order to predict future movements in the value of the Japanese yen versus the U.S. dollar.
 
-You will gain proficiency in the following tasks:
+## Time-Series Forecasting
 
-1. Time Series Forecasting
-2. Linear Regression Modeling
+The first part of the analysis, provided by the `time_series_analysis.ipynb` notebook, contains code to model the short-term price movement of the Yen with respect to the U.S. Dollar.
 
+The Hodrick-Prescott Filter is used to extract noise data and isolate the daily returns. Price modeling is performed using the ARMA and ARIMA models. Lastly, volatility is modeled with GARCH.
 
-- - -
+### Conclusions
 
-### Files
+A slight edge is given to the ARMA model since AIC and BIC (15798.142, 15832.765 respectively) are smaller than those for ARIMA, and the prediction continues the existing short-term historical trend. However the ARIMA model has a better fit with 0.302, as opposed to 0.422.
 
-Use the following starter code to complete this assignment. 
+Based on the disagreement of two models (ARMA and ARIMA) that the price of Yen is forecast to either go up or down in the short term, I would not recommend buying the Yen at this time as we do not have a reliable conclusion.
 
-Note: The starter code shows example calculations and figures to use as a guide. However, your actual output may differ depending on the code and data used.
+The risk of Yen is expected to increase based on the GARCH analysis.
 
-[Time-Series Starter Notebook](Starter_Code/time_series_analysis.ipynb)
-
-[Linear Regression Starter Notebook](Starter_Code/regression_analysis.ipynb)
-
-[Yen Data CSV File](Starter_Code/yen.csv)
+Based on the model fit assessment, I would not feel confident using these models for trading that requires directional prediction. One mitigating factor could be good prediction history if the models are tested against historical data. However, for trading based on volatility these models predict an increase in volatility.
 
 - - -
 
-### Instructions
+## Linear Regression Forecasting
 
-#### Time-Series Forecasting
+In the second part of the analysis, in notebook `regression_analysis.ipynb`, the Scikit-Learn linear regression model to predict Yen futures returns with *lagged* Yen futures returns and categorical calendar seasonal effects.
 
-In this notebook, you will load historical Dollar-Yen exchange rate futures data and apply time series analysis and modeling to determine whether there is any predictable behavior.
+After splitting the returns and lagged returns into training and testing data, a sklearn linear regression model is fit. Predictions are compared with known test data and the model performance is evaluated.
 
-Follow the steps outlined in the time-series starter notebook to complete the following:
+The following performance metrics were computed:
 
-1. Decomposition using a Hodrick-Prescott Filter (Decompose the Settle price into trend and noise).
-2. Forecasting Returns using an ARMA Model.
-3. Forecasting the Settle Price using an ARIMA Model.
-4. Forecasting Volatility with GARCH.
+| Metric | In-Sample | Out-of-Sample |
+| - | - | - |
+| Mean Squared Error (MSE) | 0.02626851739283526 | 0.028607388052668496 |
+| Root Mean Squared Error (RMSE) | 0.1620756533006585 | 0.16913718707802994 |
 
-Use the results of the time series analysis and modeling to answer the following questions:
+### Conclusions
 
-1. Based on your time series analysis, would you buy the yen now?
-2. Is the risk of the yen expected to increase or decrease?
-3. Based on the model evaluation, would you feel confident in using these models for trading?
+The Scikit-Learn linear regression model performs with similar error metrics in both the in- and out-of-sample datasets. In-sample has a slightly better MSE, and out-of-sample a very slightly better RMSE. Performance can be considered "consistent" across both datasets.
 
+MSE and RMSE are similar between in- and out-of-sample performance. This leads to the conclusion that the model makes predictions with similar accuracy for both the trained and test data.
 
-#### Linear Regression Forecasting
-
-In this notebook, you will build a Scikit-Learn linear regression model to predict Yen futures ("settle") returns with *lagged* Yen futures returns and categorical calendar seasonal effects (e.g., day-of-week or week-of-year seasonal effects).
-
-Follow the steps outlined in the regression_analysis starter notebook to complete the following:
-
-1. Data Preparation (Creating Returns and Lagged Returns and splitting the data into training and testing data)
-2. Fitting a Linear Regression Model.
-3. Making predictions using the testing data.
-4. Out-of-sample performance.
-5. In-sample performance.
-
-Use the results of the linear regression analysis and modeling to answer the following question:
-
-* Does this model perform better or worse on out-of-sample data compared to in-sample data?
-
-- - -
-
-### Hints and Considerations
-
-* Out-of-sample data is data that the model hasn't seen before (Testing data).
-* In-sample data is data that the model was trained on (Training data).
-
-- - -
-
-### Submission
-
-* Create Jupyter Notebooks for the analysis and host the notebooks on GitHub.
-
-* Include a Markdown that summarizes your models and findings and include this report in your GitHub repo.
-
-* Submit the link to your GitHub project to Bootcampspot.
+MSE and RMSE values are favorable (MSE < .05), indicating that the model is accurate.
